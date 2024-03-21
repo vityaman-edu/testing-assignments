@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    api(project(":list"))
+    api(project(":math"))
 }
