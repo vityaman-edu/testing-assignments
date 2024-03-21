@@ -4,4 +4,4 @@ plugins {
 
 rootProject.name = "testing-assignments"
 
-include("lib")
+include("app", "list", "utilities")

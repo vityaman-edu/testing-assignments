@@ -1,6 +1,5 @@
 plugins {
-    alias(libs.plugins.jvm)
-    `java-library`
+    id("org.jetbrains.kotlin.jvm")
 }
 
 repositories {
@@ -8,11 +7,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation(libs.junit.jupiter.engine)
+    constraints {
+        implementation("org.apache.commons:commons-text:1.11.0")
+    }
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    api(libs.commons.math3)
-    implementation(libs.guava)
 }
 
 java {
