@@ -2,9 +2,37 @@ package ru.vityaman.math
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.math.PI
+import kotlin.math.sqrt
+
 
 class SinSeriesTest {
     private val epsilon = 0.001
+    val sin = { x: Double -> SinSeries(12)(x) }
+
+    @Test
+    fun `Well-known sinus values`() {
+        assertEquals(+0.0, sin(-1.00 * PI), epsilon)
+        assertEquals(-1.0, sin(-0.50 * PI), epsilon)
+        assertEquals(+0.0, sin(+0.00 * PI), epsilon)
+        assertEquals(+1.0, sin(+0.50 * PI), epsilon)
+        assertEquals(+0.0, sin(+1.00 * PI), epsilon)
+
+        assertEquals(-sqrt(2.0) / 2, sin(-0.75 * PI), epsilon)
+        assertEquals(-sqrt(2.0) / 2, sin(-0.25 * PI), epsilon)
+        assertEquals(+sqrt(2.0) / 2, sin(+0.25 * PI), epsilon)
+        assertEquals(+sqrt(2.0) / 2, sin(+0.75 * PI), epsilon)
+
+        assertEquals(-1.0 / 2, sin(-5 * PI / 6), epsilon)
+        assertEquals(-1.0 / 2, sin(-1 * PI / 6), epsilon)
+        assertEquals(+1.0 / 2, sin(+1 * PI / 6), epsilon)
+        assertEquals(+1.0 / 2, sin(+5 * PI / 6), epsilon)
+
+        assertEquals(-sqrt(3.0) / 2, sin(-1 * PI / 3), epsilon)
+        assertEquals(-sqrt(3.0) / 2, sin(-2 * PI / 3), epsilon)
+        assertEquals(+sqrt(3.0) / 2, sin(+2 * PI / 3), epsilon)
+        assertEquals(+sqrt(3.0) / 2, sin(+1 * PI / 3), epsilon)
+    }
 
     @Test
     fun `Approximating the value of sin(3)`() {
