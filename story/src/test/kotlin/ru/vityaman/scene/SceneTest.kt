@@ -25,23 +25,12 @@ class SceneTest {
                             "Звезды",
                             ActorGroup(
                                 listOf(
-                                    NamedActor(
-                                        "Солнце", Star(JustLight(Brightness(666)))
-                                    ),
-                                    NamedActor(
-                                        "Тусклик", Star(JustLight(Brightness(100)))
-                                    )
+                                    NamedActor("Солнце", Star(JustLight(Brightness(666)))),
+                                    NamedActor("Тусклик", Star(JustLight(Brightness(100))))
                                 )
                             )
                         ),
-                        ThatSpaceship(
-                            ThatEngine(),
-                            ThatSpeed(),
-                            setOf(
-                                Arthur(),
-                                Ford(),
-                            )
-                        )
+                        ThatSpaceship(ThatEngine(), ThatSpeed(), setOf(Arthur(), Ford()))
                     )
                 )
             )
