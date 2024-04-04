@@ -10,11 +10,15 @@ class ThatSpaceship(
     override val speed: Speed,
     private val team: Set<Person>,
 ) : Spaceship {
+    init {
+        require(team.isNotEmpty())
+    }
+
     override val state: String
-        get() = "Космический корабль, летящий со скоростью ${speed.description} (орел)" +
+        get() = "Космический корабль, летящий со скоростью ${speed.description}" +
                 ", управляемый следующими штацкими: " +
                 team.joinToString(", ") { it.state } + ", " +
-                "а в нем ${engine.state} "
+                "а в нем ${engine.state}"
 
     override fun resume() {
         engine.resume()
