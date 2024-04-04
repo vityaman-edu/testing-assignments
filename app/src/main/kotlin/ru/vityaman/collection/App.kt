@@ -1,6 +1,6 @@
-package org.example.app
+package ru.vityaman.collection
 
-import org.example.utilities.StringUtils
+import org.example.collection.StringUtils
 
 import org.apache.commons.text.WordUtils
 

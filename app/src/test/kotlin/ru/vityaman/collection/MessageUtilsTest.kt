@@ -1,4 +1,4 @@
-package org.example.app
+package ru.vityaman.collection
 
 import org.junit.jupiter.api.Test
 

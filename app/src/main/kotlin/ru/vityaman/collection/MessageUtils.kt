@@ -1,4 +1,4 @@
-package org.example.app
+package ru.vityaman.collection
 
 class MessageUtils {
     companion object {
