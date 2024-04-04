@@ -159,18 +159,7 @@ class FixedChainHashMultiSetTest {
 
     @Test
     fun `XorHash keys distribution`() {
-        val randomString = {
-            val random = ThreadLocalRandom.current()
-            val alphabet = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-            val size = abs(random.nextLong()) % 100
-            random
-                .ints(size, 0, alphabet.size)
-                .asSequence()
-                .map(alphabet::get)
-                .joinToString("")
-        }
-
-        val strings = (1..1000).map { randomString() }
+        val strings = (1..1000).map { randomString(maxSize = 100) }
 
         val bucketsCount = 37
         val set = Set(bucketsCount)
@@ -180,5 +169,36 @@ class FixedChainHashMultiSetTest {
 
         val distribution = set.buckets.map { it.size }
         assertTrue(distribution.max() < 2 * strings.size / bucketsCount)
+    }
+
+    @Test
+    fun `Works as well as reference solution`() {
+        val silly = ListMultiSet<XorHashedString>()
+        val smart = FixedChainHashMultiSet<XorHashedString>(37)
+
+        for (i in 1..1_000) {
+            val action = randomInt(3)
+            val string = XorHashedString(randomString(5))
+            when (action) {
+                0 -> assertEquals(silly.contains(string), smart.contains(string))
+                1 -> assertEquals(silly.insert(string), smart.insert(string))
+                2 -> assertEquals(silly.remove(string), smart.remove(string))
+            }
+        }
+    }
+
+    private fun randomInt(limit: Int): Int {
+        return abs(ThreadLocalRandom.current().nextInt()) % limit
+    }
+
+    private fun randomString(maxSize: Int): String {
+        val random = ThreadLocalRandom.current()
+        val alphabet = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+        val size = randomInt(maxSize).toLong()
+        return random
+            .ints(size, 0, alphabet.size)
+            .asSequence()
+            .map(alphabet::get)
+            .joinToString("")
     }
 }
