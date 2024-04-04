@@ -6,6 +6,10 @@ class LimitedActor(
 ) : Actor {
     private var step: Int = 0
 
+    init {
+        require(0 < limit) { "limit must be positive, got $limit" }
+    }
+
     override val state: String
         get() = actor.state
 
