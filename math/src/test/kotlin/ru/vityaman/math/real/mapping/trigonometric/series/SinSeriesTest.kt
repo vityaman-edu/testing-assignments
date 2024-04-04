@@ -1,7 +1,8 @@
-package ru.vityaman.math
+package ru.vityaman.math.real.mapping.trigonometric.series
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import ru.vityaman.math.real.mapping.trigonometric.series.SinSeries
 import kotlin.math.PI
 import kotlin.math.sqrt
 
