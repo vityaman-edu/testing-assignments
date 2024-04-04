@@ -5,24 +5,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-
-data class XorHashedString(private val content: String) {
-    override fun hashCode(): Int {
-        var code = 0
-        for (symbol in content) {
-            code = code xor symbol.code
-            code = code shl 16
-        }
-        return code
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-        other as XorHashedString
-        return content == other.content
-    }
-}
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.abs
+import kotlin.streams.asSequence
 
 typealias Set = FixedChainHashMultiSet<XorHashedString>
 
@@ -135,7 +120,7 @@ class FixedChainHashMultiSetTest {
         val set = Set(3)
 
         assertIterableEquals(
-            set.buckets.asList(), listOf<List<String>>(
+            set.buckets.asList(), listOf<List<XorHashedString>>(
                 emptyList(), emptyList(), emptyList(),
             )
         )
@@ -170,5 +155,30 @@ class FixedChainHashMultiSetTest {
             set.buckets.asList(),
             listOf(listOf(), listOf(a), listOf()),
         )
+    }
+
+    @Test
+    fun `XorHash keys distribution`() {
+        val randomString = {
+            val random = ThreadLocalRandom.current()
+            val alphabet = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+            val size = abs(random.nextLong()) % 100
+            random
+                .ints(size, 0, alphabet.size)
+                .asSequence()
+                .map(alphabet::get)
+                .joinToString("")
+        }
+
+        val strings = (1..1000).map { randomString() }
+
+        val bucketsCount = 37
+        val set = Set(bucketsCount)
+        for (string in strings) {
+            set.insert(XorHashedString(string))
+        }
+
+        val distribution = set.buckets.map { it.size }
+        assertTrue(distribution.max() < 2 * strings.size / bucketsCount)
     }
 }
