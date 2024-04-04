@@ -9,9 +9,7 @@ repositories {
 dependencies {
     val kotestVersion = "5.8.1"
 
-    constraints {
-        implementation("org.apache.commons:commons-text:1.11.0")
-    }
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1-Beta")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
