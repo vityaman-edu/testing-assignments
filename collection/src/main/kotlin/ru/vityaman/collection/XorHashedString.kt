@@ -1,5 +1,7 @@
 package ru.vityaman.collection
 
+import kotlin.math.abs
+
 data class XorHashedString(private val content: String) {
     override fun hashCode(): Int {
         var code = 0
@@ -7,7 +9,7 @@ data class XorHashedString(private val content: String) {
             code = code xor symbol.code
             code = code shl 16
         }
-        return code
+        return abs(code)
     }
 
     override fun equals(other: Any?): Boolean {

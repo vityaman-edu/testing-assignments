@@ -12,11 +12,6 @@ import kotlin.streams.asSequence
 typealias Set = FixedChainHashMultiSet<XorHashedString>
 
 class FixedChainHashMultiSetTest {
-    // TODO: check that set uses equals not reference compare, new String
-    // TODO: check very long string
-    // TODO: check different string with same hash
-    // TODO: string with ', strange symbols, invalid unicode
-
     @ParameterizedTest
     @ValueSource(ints = [1, 100, 1_000, 10_000])
     fun `Creatable with positive buckets count`(bucketsCount: Int) {
@@ -32,7 +27,7 @@ class FixedChainHashMultiSetTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["", "a", "test", " ", "\n", "Б", "АБАСАБА"])
+    @ValueSource(strings = ["", "a", "test", " ", "\n", "Б", "АБАСАБА", "\'test\'", "\uD83D\uDE03", "हिन्दी", "\u0000", "\u0BBD"])
     fun `Insertion adds an element`(value: String) {
         val value = XorHashedString(value)
 
@@ -43,7 +38,7 @@ class FixedChainHashMultiSetTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["", "a", "test", " ", "\n", "Б", "АБАСАБА"])
+    @ValueSource(strings = ["", "a", "test", " ", "\n", "Б", "АБАСАБА", "\'test\'", "\uD83D\uDE03", "हिन्दी", "\u0000", "\u0BBD"])
     fun `Removal removes an element`(value: String) {
         val value = XorHashedString(value)
 
@@ -54,7 +49,7 @@ class FixedChainHashMultiSetTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["", "a", "test", " ", "\n", "Б", "АБАСАБА"])
+    @ValueSource(strings = ["", "a", "test", " ", "\n", "Б", "АБАСАБА", "\'test\'", "\uD83D\uDE03", "हिन्दी", "\u0000", "\u0BBD"])
     fun `Duplicates are supported`(value: String) {
         val value = XorHashedString(value)
 
@@ -69,7 +64,7 @@ class FixedChainHashMultiSetTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["", "a", "test", " ", "\n", "Б", "АБАСАБА"])
+    @ValueSource(strings = ["", "a", "test", " ", "\n", "Б", "АБАСАБА", "\'test\'", "\uD83D\uDE03", "हिन्दी", "\u0000", "\u0BBD"])
     fun `Removal unknown element does nothing`(value: String) {
         val value = XorHashedString(value)
 
@@ -77,6 +72,83 @@ class FixedChainHashMultiSetTest {
         assertFalse(set.contains(value))
         set.remove(value)
         assertFalse(set.contains(value))
+    }
+
+    @Test
+    fun `Stores long strings`() {
+        val strings = sequence {
+            yield(1_000)
+            yield(10_000)
+            yield(100_000)
+        }.map { XorHashedString(randomStringWithSize(it)) }.toList()
+
+        val set = Set(12)
+
+        for (string in strings) {
+            set.insert(string)
+        }
+
+        for (string in strings) {
+            assertTrue(set.contains(string))
+        }
+    }
+
+    @Test
+    fun `Resolves collisions of distinct string`() {
+        val set = FixedChainHashMultiSet<ConstHashedString>(3)
+
+        val test = ConstHashedString("test")
+        val mouse = ConstHashedString("mouse")
+        val joke = ConstHashedString("joke")
+        val unknown = ConstHashedString("unknown")
+
+        set.insert(test)
+        set.insert(mouse)
+        set.insert(test)
+        set.insert(joke)
+
+        assertIterableEquals(
+            listOf(listOf(test, mouse, test, joke), listOf(), listOf()),
+            set.buckets.asList(),
+        )
+
+        assertTrue(set.contains(test))
+        assertTrue(set.contains(mouse))
+        assertTrue(set.contains(joke))
+        assertFalse(set.contains(unknown))
+
+        set.remove(mouse)
+
+        assertIterableEquals(
+            listOf(listOf(test, test, joke), listOf(), listOf()),
+            set.buckets.asList(),
+        )
+
+        set.remove(unknown)
+
+        assertIterableEquals(
+            listOf(listOf(test, test, joke), listOf(), listOf()),
+            set.buckets.asList(),
+        )
+    }
+
+    @Test
+    fun `Respects equals`() {
+        val left = java.lang.String("")
+        val right = java.lang.String("")
+
+        val set = FixedChainHashMultiSet<java.lang.String>(11)
+        set.insert(left)
+        set.insert(right)
+
+        assertTrue(set.contains(left))
+        assertTrue(set.contains(right))
+
+        set.remove(left)
+        set.remove(right)
+
+        assertFalse(set.contains(left))
+        assertFalse(set.contains(right))
     }
 
     @Test
@@ -195,14 +267,18 @@ class FixedChainHashMultiSetTest {
         return abs(ThreadLocalRandom.current().nextInt()) % limit
     }
 
-    private fun randomString(maxSize: Int): String {
+    private fun randomStringWithSize(size: Int): String {
         val random = ThreadLocalRandom.current()
         val alphabet = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-        val size = randomInt(maxSize).toLong()
         return random
-            .ints(size, 0, alphabet.size)
+            .ints(size.toLong(), 0, alphabet.size)
             .asSequence()
             .map(alphabet::get)
             .joinToString("")
+    }
+
+    private fun randomString(maxSize: Int): String {
+        val size = randomInt(maxSize)
+        return randomStringWithSize(size)
     }
 }
