@@ -14,6 +14,12 @@ import ru.vityaman.entity.spaceship.that.ThatSpeed
 import ru.vityaman.location.Space
 
 class SceneTest {
+    // TODO: mutable spaceship to add team members
+    // TODO: brightness +/-
+    // TODO: spaceship add people, objects, boxes
+    // TODO: gravity, speed > gravity then ok
+    // TODO: planet with gravity
+
     @Test
     fun `Only the Arthur in the space`(): Unit = runBlocking {
         val text = StringBuilder()
@@ -32,6 +38,7 @@ class SceneTest {
             text.toString().lines(),
         )
     }
+
 
     @Test
     fun `That Story regression`(): Unit = runBlocking {

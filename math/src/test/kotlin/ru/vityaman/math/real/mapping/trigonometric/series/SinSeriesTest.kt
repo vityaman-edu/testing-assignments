@@ -11,6 +11,9 @@ class SinSeriesTest {
     private val epsilon = 0.001
     val sin = { x: Double -> SinSeries(12)(x) }
 
+    // TODO: property based testing for sin(-x) = -sin(x)
+    // TODO: tricky floats like +0 -0, +inf, +inf, nan
+
     @Test
     fun `Well-known sinus values`() {
         assertEquals(+0.0, sin(-1.00 * PI), epsilon)

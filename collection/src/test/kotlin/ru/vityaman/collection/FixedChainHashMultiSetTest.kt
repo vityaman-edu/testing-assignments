@@ -12,6 +12,10 @@ import kotlin.streams.asSequence
 typealias Set = FixedChainHashMultiSet<XorHashedString>
 
 class FixedChainHashMultiSetTest {
+    // TODO: check that set uses equals not reference compare, new String
+    // TODO: check very long string
+    // TODO: check different string with same hash
+    // TODO: string with ', strange symbols, invalid unicode
 
     @ParameterizedTest
     @ValueSource(ints = [1, 100, 1_000, 10_000])
