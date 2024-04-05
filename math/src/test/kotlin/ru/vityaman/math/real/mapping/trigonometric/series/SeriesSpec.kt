@@ -22,4 +22,9 @@ class SeriesSpec : StringSpec({
             CosSeries(n)(x) shouldBe (cos(x) plusOrMinus 0.001)
         }
     }
+    "SinSeries as sine is an odd function" {
+        checkAll(Arb.double(-PI, PI), Arb.int(8, 16)) { x, n ->
+            SinSeries(n)(x) shouldBe (-SinSeries(n)(-x) plusOrMinus 0.001)
+        }
+    }
 })

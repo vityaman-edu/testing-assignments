@@ -1,8 +1,8 @@
 package ru.vityaman.math.real.mapping.trigonometric.series
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import ru.vityaman.math.real.mapping.trigonometric.series.SinSeries
 import kotlin.math.PI
 import kotlin.math.sqrt
 
@@ -10,9 +10,6 @@ import kotlin.math.sqrt
 class SinSeriesTest {
     private val epsilon = 0.001
     val sin = { x: Double -> SinSeries(12)(x) }
-
-    // TODO: property based testing for sin(-x) = -sin(x)
-    // TODO: tricky floats like +0 -0, +inf, +inf, nan
 
     @Test
     fun `Well-known sinus values`() {
@@ -60,5 +57,14 @@ class SinSeriesTest {
         assertEquals(-1056.939000, SinSeries(6)(x), epsilon)
         assertEquals(+0548.966000, SinSeries(7)(x), epsilon)
         assertEquals(-0215.751000, SinSeries(8)(x), epsilon)
+    }
+
+    @Test
+    fun `Is resilient to tricky floats`() {
+        assertEquals(-0.0, sin(-0.0), epsilon)
+        assertEquals(+0.0, sin(+0.0), epsilon)
+        assertTrue(sin(Double.POSITIVE_INFINITY).isNaN())
+        assertTrue(sin(Double.NEGATIVE_INFINITY).isNaN())
+        assertTrue(sin(Double.NaN).isNaN())
     }
 }
