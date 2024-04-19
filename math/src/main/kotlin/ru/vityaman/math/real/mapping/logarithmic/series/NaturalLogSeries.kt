@@ -16,10 +16,10 @@ class NaturalLogSeries(private val limit: Int) : Mapping {
     }
 
     override operator fun invoke(x: Double): Double =
-        if (x.equals(-0.0)) {
-            Double.NEGATIVE_INFINITY
-        } else {
-            1 / (x / (x - 1) - (1 until limit).sumOf { k ->
+        when (x) {
+            -0.0 -> Double.NaN
+            Double.POSITIVE_INFINITY -> Double.POSITIVE_INFINITY
+            else -> 1 / (x / (x - 1) - (1 until limit).sumOf { k ->
                 2.0.pow(-k) * x.pow(2.0.pow(-k)) / (1 + x.pow(2.0.pow(-k)))
             })
         }
