@@ -7,8 +7,8 @@ import kotlin.math.sign
 
 class SinSeries(private val limit: Int) : Mapping {
     companion object {
-        private const val LIMIT_MAX: Int = 32
-        private val limitRange = (1 until LIMIT_MAX)
+        private const val LIMIT_MAX: Int = 16
+        private val limitRange = (1 .. LIMIT_MAX)
     }
 
     init {
