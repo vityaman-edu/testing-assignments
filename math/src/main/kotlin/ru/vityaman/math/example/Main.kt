@@ -1,7 +1,6 @@
 package ru.vityaman.math.example
 
 import ru.vityaman.math.example.csv.ExternalCsvFile
-import kotlin.math.PI
 
 fun dump(step: Double) {
     val example = ExampleMapping()

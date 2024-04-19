@@ -14,12 +14,4 @@ class IntegrationTest {
         val actual = f(x)
         assertEquals(expected, actual, eps)
     }
-
-    @ParameterizedTest
-    @CsvFileSource(resources = ["/points.csv"], numLinesToSkip = 1)
-    fun `Faked dependencies`(x: Double, expected: Double) {
-        val actual = f(x)
-        // TODO:
-        assertEquals(expected, actual, eps)
-    }
 }
