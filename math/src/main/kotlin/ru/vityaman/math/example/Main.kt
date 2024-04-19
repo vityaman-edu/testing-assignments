@@ -15,6 +15,7 @@ enum class ModuleName {
 
 fun dump(module: ModuleName, step: Double) {
     val example = ExampleMapping()
+
     val mapping = when (module) {
         ModuleName.SIN -> example.sin
         ModuleName.COS -> example.cos
@@ -25,6 +26,7 @@ fun dump(module: ModuleName, step: Double) {
         ModuleName.LOG5 -> example.log5
         ModuleName.EXAMPLE -> example
     }
+
     ExternalCsvFile("test.csv").batch {
         for (x in -10.0..10.0 step step) {
             writeln(x, mapping(x))
