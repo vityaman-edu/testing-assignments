@@ -18,16 +18,15 @@ import ru.vityaman.math.real.mapping.trigonometric.series.SinSeries
 import kotlin.math.pow
 
 class ExampleMapping(
-    private val sin: Sin = FixedSinSeries(SinSeries(limit = 10)),
-    private val cos: Cos = CosFromSin(sin),
-    private val sec: Sec = SecFromCos(cos),
-    private val cot: Cot = CotFormula(cos, sin),
-    private val csc: Csc = CscFormula(sin),
-    private val ln: NaturalLog = NaturalLogSeries(limit = 63),
-    private val log2: BasedLog = BasedLog(2.0, ln),
-    private val log3: BasedLog = BasedLog(3.0, ln),
-    private val log5: BasedLog = BasedLog(5.0, ln),
-    private val log10: BasedLog = BasedLog(10.0, ln),
+    val sin: Sin = FixedSinSeries(SinSeries(limit = 10)),
+    val cos: Cos = CosFromSin(sin),
+    val sec: Sec = SecFromCos(cos),
+    val cot: Cot = CotFormula(cos, sin),
+    val csc: Csc = CscFormula(sin),
+    val ln: NaturalLog = NaturalLogSeries(limit = 63),
+    val log2: BasedLog = BasedLog(2.0, ln),
+    val log5: BasedLog = BasedLog(5.0, ln),
+    val log10: BasedLog = BasedLog(10.0, ln),
 ) : Mapping {
     // x <= 0 : (((((cot(x) + sec(x)) / sec(x)) - sec(x)) * (((sin(x) ^ 3) + sec(x)) + (sin(x) + csc(x)))) ^ 3)
     // x > 0 : (((((log_5(x) ^ 2) ^ 2) - log_2(x)) - log_2(x)) + ((log_5(x) ^ 3) / (ln(x) / ((log_2(x) ^ 3) + (log_10(x) - log_5(x))))))
