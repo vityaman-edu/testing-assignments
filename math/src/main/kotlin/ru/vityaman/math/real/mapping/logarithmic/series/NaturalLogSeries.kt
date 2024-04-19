@@ -1,9 +1,9 @@
 package ru.vityaman.math.real.mapping.logarithmic.series
 
-import ru.vityaman.math.real.mapping.Mapping
+import ru.vityaman.math.real.mapping.logarithmic.NaturalLog
 import kotlin.math.pow
 
-class NaturalLogSeries(private val limit: Int) : Mapping {
+class NaturalLogSeries(private val limit: Int) : NaturalLog {
     companion object {
         private const val LIMIT_MAX: Int = 64
         private val limitRange = (1 until LIMIT_MAX)

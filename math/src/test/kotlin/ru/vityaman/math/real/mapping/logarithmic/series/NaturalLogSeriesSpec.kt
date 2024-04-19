@@ -19,11 +19,13 @@ class NaturalLogSeriesSpec : StringSpec({
             NaturalLogSeries(n)(x) shouldBe (ln(x) plusOrMinus eps)
         }
     }
+
     "Converges everywhere" {
         checkAll(Arb.double(0.0 + eps, MAX_VALUE), Arb.int(32, 63)) { x, n ->
             NaturalLogSeries(n)(x) shouldBe (ln(x) plusOrMinus eps)
         }
     }
+
     "Is undefined on negative" {
         checkAll(Arb.double(NEGATIVE_INFINITY, 0.0 - eps), Arb.int(32, 63)) { x, n ->
             NaturalLogSeries(n)(x) shouldBe Double.NaN
